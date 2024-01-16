@@ -1,0 +1,1 @@
+# NCKH_Hand_gesture_recognition_Mediapipe
