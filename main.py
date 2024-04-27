@@ -109,7 +109,7 @@ def solve(args):
                 
                 # Hand sign classification
                 hand_sign_id = keypoint_classifier(pre_processed_landmark_list)
-                if hand_sign_id == 2: # Point gesture
+                if hand_sign_id == 0: # Point gesture == Nothing
                     point_history.append(landmark_list[8]) # lưu 16 thông tin lịch sử theo đầu ngón trỏ
                 else:
                     point_history.append([0, 0]) # lưu theo gốc bàn tay

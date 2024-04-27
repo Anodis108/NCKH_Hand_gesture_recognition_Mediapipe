@@ -1,9 +1,7 @@
 import cv2 as cv
 import mediapipe as mp
 
-from caculate import *
-from draw import *
-from process import *
+from solve import *
 
 def test():
     # test with pictures
@@ -69,3 +67,5 @@ def test():
         cv.imshow('Sau khi vẽ', cv.flip(annotated_image, 1))
         cv.waitKey(0)
         cv.destroyAllWindows()
+
+test()
