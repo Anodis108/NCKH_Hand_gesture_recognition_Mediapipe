@@ -32,6 +32,3 @@ if __name__ == '__main__':
     p1.start()
     p2 = threading.Thread(target=Tetris(16, 30).run, args=())
     p2.start()
-
-
-
