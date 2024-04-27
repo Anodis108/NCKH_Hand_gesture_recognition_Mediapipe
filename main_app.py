@@ -11,6 +11,9 @@ from model import KeyPointClassifier
 from model import PointHistoryClassifier
 
 from solve import *
+
+gesture = None
+
 def solve(args):
     # Argument parsing
     cap_device = args.device
@@ -143,13 +146,15 @@ def solve(args):
                     keypoint_classifier_labels[hand_sign_id], # dự đoán cử chỉ tay theo dự đoán
                     point_history_classifier_labels[most_common_fg_id[0][0]] # labels cử chỉ tay most theo lịch sử
                 )
+                global gesture
+                gesture = keypoint_classifier_labels[hand_sign_id]
         else:
             point_history.append([0, 0])
             
         debug_image = draw_point_history(debug_image, point_history) # Dựa trên lịch sử, nếu là con trỏ thì vẽ hình tròn đầu ngón tay  
         debug_image = draw_info(debug_image, fps, mode, number) # vẽ khu vực FPS
         
-            
+        print(gesture, 1)
         # Screen reflection
         cv.imshow('Hand Gesture Recognition', debug_image)
         if cv.waitKey(1) & 0xFF == ord('q'):

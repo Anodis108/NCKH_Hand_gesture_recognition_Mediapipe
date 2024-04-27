@@ -17,9 +17,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
 from pygame.locals import *
-
 # Configuration of building shape block
 # Width of the shape block
 BWIDTH     = 20

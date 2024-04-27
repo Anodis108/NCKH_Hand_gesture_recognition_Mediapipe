@@ -8,8 +8,6 @@
 #  |          3) a "multi_handedness" field that contains the handedness (left v.s.
 #  |             right hand) of the detected hand
 
-gesture = None
-
 import threading # chạy đa luồng
 
 import csv
@@ -26,6 +24,9 @@ import mediapipe as mp
 from utils import CvFpsCalc
 from model import KeyPointClassifier
 from model import PointHistoryClassifier
+
+gesture = None
+
 
 def get_args():
     parser = argparse.ArgumentParser()
@@ -609,8 +610,8 @@ import pygame
 
 import random
 import math
-import block
-import constants
+import game.block as block
+import game.constants as constants
 
 class Tetris(object):
     """
@@ -667,7 +668,6 @@ class Tetris(object):
         action.
         """
         # Take the event from the event queue.
-        print(gesture, 1)
         for ev in pygame.event.get():
             # Check if the close button was fired.
             if ev.type == pygame.QUIT or (ev.type == pygame.KEYDOWN and ev.unicode == 'q'):

@@ -22,9 +22,10 @@ import pdb
 
 import random
 import math
-import block
-import constants
+import game.block as block
+import game.constants as constants
 
+import main_app 
 class Tetris(object):
     """
     The class with implementation of tetris game logic.
@@ -85,16 +86,19 @@ class Tetris(object):
             if ev.type == pygame.QUIT or (ev.type == pygame.KEYDOWN and ev.unicode == 'q'):
                 self.done = True
             # Detect the key evevents for game control.
-            if ev.type == pygame.KEYDOWN:
-                if ev.key == pygame.K_DOWN:
+            gesture = main_app.gesture
+            print(gesture, 2)
+            
+            if gesture is not None:
+                if gesture == 'Down':
                     self.active_block.move(0,constants.BHEIGHT)
-                if ev.key == pygame.K_LEFT:
+                if gesture == 'Left':
                     self.active_block.move(-constants.BWIDTH,0)
-                if ev.key == pygame.K_RIGHT:
+                if gesture == 'Right':
                     self.active_block.move(constants.BWIDTH,0)
-                if ev.key == pygame.K_SPACE:
+                if gesture == 'Rotate':
                     self.active_block.rotate()
-                if ev.key == pygame.K_p:
+                if gesture == 'Click':
                     self.pause()
        
             # Detect if the movement event was fired by the timer.
