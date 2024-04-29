@@ -1,2 +1,2 @@
-from game.block import *
+from game.block import Block
 from game.constants import *
