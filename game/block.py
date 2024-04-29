@@ -17,13 +17,10 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import pdb
-
 import game.constants as constants
 import pygame
 import math
 import copy
-import sys
 class Block(object):
     """
     Class for handling of tetris block
