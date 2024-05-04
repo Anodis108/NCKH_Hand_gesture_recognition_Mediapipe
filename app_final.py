@@ -2,7 +2,7 @@ import os
 import argparse
 import threading
 
-from main_app import solve
+import main_app 
 from tetris import Tetris
 
 def get_args():
@@ -28,7 +28,8 @@ def get_args():
 if __name__ == '__main__':
     args = get_args()
     # os.environ['CUDA_VISIBLE_DEVICES'] = str(args.cuda_device_no)
-    p1 = threading.Thread(target=solve, args=(args,)) # thêm dấu (,) ở đuôi args vì nó yêu cầu đuôi là một iterable
+    p1 = threading.Thread(target=main_app.solve, args=(args,)) # thêm dấu (,) ở đuôi args vì nó yêu cầu đuôi là một iterable
     p1.start()
+    
     p2 = threading.Thread(target=Tetris(16, 30).run, args=())
     p2.start()

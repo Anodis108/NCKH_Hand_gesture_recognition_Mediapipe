@@ -130,6 +130,7 @@ class Tetris(object):
         # Initialize the game (pygame, fonts)
         pygame.init()
         pygame.font.init()
+        
         self.myfont = pygame.font.SysFont(pygame.font.get_default_font(),constants.FONT_SIZE)
         self.screen = pygame.display.set_mode((self.resx,self.resy))
         pygame.display.set_caption("Tetris")
@@ -144,11 +145,12 @@ class Tetris(object):
         self.new_block = True
         # Print the initial score
         self.print_status_line()
-        while not(self.done) and not(self.game_over):
+        while not(self.done) and not(self.game_over) :
             # Get the block and run the game logic
             self.get_block()
             self.game_logic()
-            self.draw_game()
+            if (main_app.gesture is not None):
+                self.draw_game()
         # Display the game_over and wait for a keypress
         if self.game_over:
             self.print_game_over()
