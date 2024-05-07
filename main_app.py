@@ -154,7 +154,7 @@ def solve(args):
         debug_image = draw_point_history(debug_image, point_history) # Dựa trên lịch sử, nếu là con trỏ thì vẽ hình tròn đầu ngón tay  
         debug_image = draw_info(debug_image, fps, mode, number) # vẽ khu vực FPS
         
-        print(gesture, 1)
+        # print(gesture, 1)
         # Screen reflection
         cv.imshow('Hand Gesture Recognition', debug_image)
         if cv.waitKey(1) & 0xFF == ord('q'):

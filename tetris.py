@@ -86,7 +86,7 @@ class Tetris(object):
                 self.done = True
             # Detect the key evevents for game control.
             gesture = main_app.gesture
-            print(gesture, 2)
+            # print(gesture, 2)
             
             if gesture is not None:
                 if gesture == 'Down':

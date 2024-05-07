@@ -31,5 +31,5 @@ if __name__ == '__main__':
     p1 = threading.Thread(target=main_app.solve, args=(args,)) # thêm dấu (,) ở đuôi args vì nó yêu cầu đuôi là một iterable
     p1.start()
     
-    p2 = threading.Thread(target=Tetris(16, 30).run, args=())
-    p2.start()
+    # p2 = threading.Thread(target=Tetris(16, 30).run, args=())
+    # p2.start()
