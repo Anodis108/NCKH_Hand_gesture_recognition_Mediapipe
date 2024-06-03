@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import asyncio
 import threading
+import sys
 # File: tetris.py 
 # Description: Main file with tetris game.
 # Author: Pavel Benáček <pavel.benacek@gmail.com>
@@ -31,7 +32,7 @@ class Tetris(object):
     The class with implementation of tetris game logic.
     """
 
-    def __init__(self,bx,by, options):
+    def __init__(self,bx,by):
         """
         Initialize the tetris object.
 
@@ -39,6 +40,8 @@ class Tetris(object):
             - bx - number of blocks in x
             - by - number of blocks in y
         """
+        self.bx = bx
+        self.by = by
         # Compute the resolution of the play board based on the required number of blocks.
         self.resx = bx*constants.BWIDTH+2*constants.BOARD_HEIGHT+constants.BOARD_MARGIN
         self.resy = by*constants.BHEIGHT+2*constants.BOARD_HEIGHT+constants.BOARD_MARGIN
@@ -74,68 +77,58 @@ class Tetris(object):
         self.speed = 1
         # The score level threshold
         self.score_level = constants.SCORE_LEVEL
+    def draw_text(self, text, font, color, x, y, font_size):
+        """
+        Vẽ văn bản lên màn hình.
 
+        Parameters:
+            - text: Văn bản cần vẽ.
+            - font: Phông chữ được sử dụng.
+            - color: Màu của văn bản.
+            - x: Tọa độ x của văn bản.
+            - y: Tọa độ y của văn bản.
+            - font_size: Kích thước của font chữ.
+        """
+        font = pygame.font.Font(None, font_size);
+        text_obj = font.render(text, True, color)
+        text_rect = text_obj.get_rect()
+        text_rect.center = (x, y)
+        self.screen.blit(text_obj, text_rect)
+
+    
     def apply_action(self):
         """
         Get the event from the event queue and run the appropriate 
         action.
         """
-        if (self.options == 0):
+
         # Take the event from the event queue.
-            for ev in pygame.event.get():
-                # Check if the close button was fired.
-                if ev.type == pygame.QUIT or (ev.type == pygame.KEYDOWN and ev.unicode == 'q'):
-                    self.done = True
-                # Detect the key evevents for game control.
-                if ev.type == pygame.KEYDOWN:
-                    if ev.key == pygame.K_s:
-                        self.active_block.move(0,constants.BHEIGHT)
-                    if ev.key == pygame.K_a:
-                        self.active_block.move(-constants.BWIDTH,0)
-                    if ev.key == pygame.K_d:
-                        self.active_block.move(constants.BWIDTH,0)
-                    if ev.key == pygame.K_SPACE:
-                        self.active_block.rotate()
-                    if ev.key == pygame.K_p:
-                        self.pause()
-        
-                # Detect if the movement event was fired by the timer.
-                if ev.type == constants.TIMER_MOVE_EVENT:
+        for ev in pygame.event.get():
+            # Check if the close button was fired.
+            if ev.type == pygame.QUIT or (ev.type == pygame.KEYDOWN and ev.unicode == 'q'):
+                self.done = True
+            # Detect the key evevents for game control.
+            if ev.type == pygame.KEYDOWN:
+                if ev.key == pygame.K_s:
+                    is_held = True
+                    start_time = time.time()
+                    # if is_held and time.time() - start_time >= 1:
+                    #     self.active_block.move(0,constants.BHEIGHT * )
+                    # else:
                     self.active_block.move(0,constants.BHEIGHT)
-        else :
-            for ev in pygame.event.get():
-                # Check if the close button was fired.
-                if ev.type == pygame.QUIT or (ev.type == pygame.KEYDOWN and ev.unicode == 'q'):
-                    self.done = True
-                # Detect the key evevents for game control.
-                if ev.type == pygame.KEYDOWN:
-                    if ev.key == pygame.K_DOWN:
-                        self.active_block.move(0,constants.BHEIGHT)
-                    if ev.key == pygame.K_LEFT:
-                        self.active_block.move(-constants.BWIDTH,0)
-                    if ev.key == pygame.K_RIGHT:
-                        self.active_block.move(constants.BWIDTH,0)
-                    if ev.key == pygame.K_KP0:
-                        self.active_block.rotate()
-                    if ev.key == pygame.K_p:
-                        self.pause()
-        
-                # Detect if the movement event was fired by the timer.
-                if ev.type == constants.TIMER_MOVE_EVENT:
-                    self.active_block.move(0,constants.BHEIGHT)
-    def pause(self):
-        """
-        Pause the game and draw the string. This function
-        also calls the flip function which draws the string on the screen.
-        """
-        # Draw the string to the center of the screen.
-        self.print_center(["PAUSE","Press \"p\" to continue"])
-        pygame.display.flip()
-        while True:
-            for ev in pygame.event.get():
-                if ev.type == pygame.KEYDOWN and ev.key == pygame.K_p:
-                    return
-       
+                if ev.key == pygame.K_a:
+                    self.active_block.move(-constants.BWIDTH,0)
+                if ev.key == pygame.K_d:
+                    self.active_block.move(constants.BWIDTH,0)
+                if ev.key == pygame.K_SPACE:
+                    self.active_block.rotate()
+                if ev.key == pygame.K_p:
+                    self.draw_pause_menu("Game pause")
+    
+            # Detect if the movement event was fired by the timer.
+            if ev.type == constants.TIMER_MOVE_EVENT:
+                self.active_block.move(0,constants.BHEIGHT)
+
     def set_move_timer(self):
         """
         Setup the move timer to the 
@@ -145,7 +138,7 @@ class Tetris(object):
         speed = max(1,speed)
         pygame.time.set_timer(constants.TIMER_MOVE_EVENT,speed)
  
-    async def run(self):
+    def run(self):
         # Initialize the game (pygame, fonts)
         pygame.init()
         pygame.font.init()
@@ -170,7 +163,7 @@ class Tetris(object):
             self.draw_game()
         # Display the game_over and wait for a keypress
         if self.game_over:
-            self.print_game_over()
+            self.draw_pause_menu("Game over!")
         # Disable the pygame stuff
         pygame.font.quit()
         pygame.display.quit()        
@@ -182,19 +175,7 @@ class Tetris(object):
         string = ["SCORE: {0}   SPEED: {1}x".format(self.score,self.speed)]
         self.print_text(string,constants.POINT_MARGIN,constants.POINT_MARGIN)        
 
-    def print_game_over(self):
-        """
-        Print the game over string.
-        """
-        # Print the game over text
-        self.print_center(["Game Over","Press \"q\" to exit"])
-        # Draw the string
-        pygame.display.flip()
-        # Wait untill the space is pressed
-        while True: 
-            for ev in pygame.event.get():
-                if ev.type == pygame.QUIT or (ev.type == pygame.KEYDOWN and ev.unicode == 'q'):
-                    return
+
 
     def print_text(self,str_lst,x,y):
         """
@@ -361,11 +342,130 @@ class Tetris(object):
             blk.draw()
         # Draw the screen buffer
         pygame.display.flip()
+    def draw_rounded_rect(surface, rect, color, corner_radius):
+    # Tạo hình chữ nhật bo góc
+        rect_surf = pygame.Surface(rect.size, pygame.SRCALPHA)
+        pygame.draw.rect(rect_surf, color, rect_surf.get_rect(), border_radius=corner_radius)
+        surface.blit(rect_surf, rect.topleft)
+    def draw_pause_menu(self, text):
+        WHITE = (255, 255, 255)
+        BLACK = (0, 0, 0)
+        font = pygame.font.Font(None, 36)
 
-if __name__ == "__main__":
-    A = Tetris(16,30,0)
-    B = Tetris(16,30,1)
-    t1 = threading.Thread(target = A.run, args=())
-    t2 = threading.Thread(target = B.run, args=())
+        while True:
+           
+
+            # Vẽ thanh pause
+            pause_color = self.active_block.color
+            
+            # Tạo đối tượng Rect với bo tròn góc
+            pause_rect = pygame.Rect(self.resx // 8, self.resy // 3, self.resx * 6 // 8, self.resy // 9)
+           
+            pygame.draw.rect(self.screen, pause_color, pause_rect, width=5,border_radius=15)
+            self.draw_text(text, font, WHITE, pause_rect.centerx, pause_rect.y + 25, 40)
+
+            # Vẽ các lựa chọn
+            continue_button_background = pygame.Rect(pause_rect.left + 20, pause_rect.bottom - 20, 100, 30)
+            pygame.draw.rect(self.screen, BLACK, continue_button_background, border_radius=10)
+            continue_button = pygame.Rect(pause_rect.left + 20, pause_rect.bottom - 20, 100, 30)
+            pygame.draw.rect(self.screen, pause_color, continue_button, 2, 10)
+
+            self.draw_text('Continue', font, WHITE, continue_button.centerx, continue_button.y + 15, 30)
+            
+            quit_button_background = pygame.Rect(pause_rect.right - 120, pause_rect.bottom - 20, 100, 30)
+            pygame.draw.rect(self.screen, BLACK, quit_button_background, border_radius=10)
+            quit_button = pygame.Rect(pause_rect.right - 120, pause_rect.bottom - 20, 100, 30)
+            self.draw_text('Quit', font, WHITE, quit_button.centerx, quit_button.y + 15, 30)
+            pygame.draw.rect(self.screen, pause_color, quit_button, 2, 10)
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+                elif event.type == pygame.MOUSEBUTTONDOWN:
+                    mouse_pos = event.pos
+
+                    # Kiểm tra xem chuột ở đâu
+                    if continue_button.collidepoint(mouse_pos):
+                        if text == "Game over!":
+                            Tetris.run(self.bx, self.by)
+                        return 
+                    elif quit_button.collidepoint(mouse_pos):
+                        # Thực hiện hành động khi nhấp vào nút "Quit"
+                        return ScreenManager.Run_game(self.bx, self.by)
+
+            pygame.display.update()
+class ScreenManager:
+    def __init__(self, screen_width, screen_height, x, y):
+        self.screen_width = screen_width
+        self.screen_height = screen_height
+        self.screen = pygame.display.set_mode((self.screen_width, self.screen_height))
+        self.x = x
+        self.y = y
+        pygame.display.set_caption("Menu Game")
+
+    def draw_text(self, text, font, color, x, y):
+        text_obj = font.render(text, True, color)
+        text_rect = text_obj.get_rect()
+        text_rect.center = (x, y)
+        self.screen.blit(text_obj, text_rect)
+
+    def draw_menu(self):
+        WHITE = (255, 255, 255)
+        BLACK = (0, 0, 0)
+        font = pygame.font.Font(None, 36)
+
+        while True:
+            self.screen.fill(WHITE)
+            self.draw_text('Menu Game', font, BLACK, self.screen_width // 2, 100)
+
+            # Vẽ các lựa chọn
+            play_button = pygame.Rect(self.screen_width // 2 - 100, 200, 200, 50)
+            self.draw_text('Play', font, BLACK, self.screen_width // 2, 225)
+            pygame.draw.rect(self.screen, BLACK, play_button, 2)
+
+            instructions_button = pygame.Rect(self.screen_width // 2 - 100, 300, 200, 50)
+            self.draw_text('Tutorial', font, BLACK, self.screen_width // 2, 325)
+            pygame.draw.rect(self.screen, BLACK, instructions_button, 2)
+
+            quit_button = pygame.Rect(self.screen_width // 2 - 100, 400, 200, 50)
+            self.draw_text('Quit', font, BLACK, self.screen_width // 2, 425)
+            pygame.draw.rect(self.screen, BLACK, quit_button, 2)
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+                elif event.type == pygame.MOUSEBUTTONDOWN:
+                    mouse_pos = event.pos
+
+                    # Kiểm tra xem chuột ở đâu
+                    if play_button.collidepoint(mouse_pos):
+                        # Thực hiện hành động khi nhấp vào nút "Chơi"
+                        # Đây là nơi bạn gọi hàm để chuyển sang màn hình chơi game
+                        Tetris(self.x, self.y).run()
+
+                        
+                    elif instructions_button.collidepoint(mouse_pos):
+                        # Thực hiện hành động khi nhấp vào nút "Hướng dẫn"
+                        print("Hiển thị hướng dẫn!")
+                        
+                    elif quit_button.collidepoint(mouse_pos):
+                        # Thực hiện hành động khi nhấp vào nút "Thoát"
+                        sys.exit()
+
+            pygame.display.update()
+
+# Sử dụng
+    def Run_game(x, y):
+        pygame.init()
+        screen_width = x*constants.BWIDTH+2*constants.BOARD_HEIGHT+constants.BOARD_MARGIN
+        screen_height = y*constants.BHEIGHT+2*constants.BOARD_HEIGHT+constants.BOARD_MARGIN
+        screen_manager = ScreenManager(screen_width, screen_height, x, y)
+        return screen_manager.draw_menu()
+def Run(x, y):
+
+    ScreenManager.Run_game(x, y)
+
 
 #Special add to try pull requests
