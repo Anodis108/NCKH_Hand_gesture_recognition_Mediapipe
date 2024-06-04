@@ -89,7 +89,7 @@ class Tetris(object):
             - y: Tọa độ y của văn bản.
             - font_size: Kích thước của font chữ.
         """
-        font = pygame.font.Font(None, font_size);
+        font = pygame.font.Font(None, font_size)
         text_obj = font.render(text, True, color)
         text_rect = text_obj.get_rect()
         text_rect.center = (x, y)
@@ -110,12 +110,13 @@ class Tetris(object):
             # Detect the key evevents for game control.
             if ev.type == pygame.KEYDOWN:
                 if ev.key == pygame.K_s:
-                    is_held = True
+                    
                     
                     # if is_held and time.time() - start_time >= 1:
                     #     self.active_block.move(0,constants.BHEIGHT * )
                     # else:
                     self.active_block.move(0,constants.BHEIGHT)
+        
                 if ev.key == pygame.K_a:
                     self.active_block.move(-constants.BWIDTH,0)
                 if ev.key == pygame.K_d:
@@ -137,7 +138,37 @@ class Tetris(object):
         speed = math.floor(constants.MOVE_TICK / self.speed)
         speed = max(1,speed)
         pygame.time.set_timer(constants.TIMER_MOVE_EVENT,speed)
- 
+    def run_tutorial(self):
+        pygame.init()
+        pygame.font.init()
+        self.myfont = pygame.font.SysFont(pygame.font.get_default_font(),constants.FONT_SIZE)
+        self.screen = pygame.display.set_mode((self.resx,self.resy))
+        pygame.display.set_caption("Tetris")    
+        self.print_status_line()
+        i = 0
+        while i < 6:
+            white = (255, 255, 255)
+            BLACK = (0, 0, 0)
+
+            # Font chữ
+            font = pygame.font.Font(None, 36)
+            text = constants.TEXT_TUTORIAL[i]
+            text_surface = font.render(text, True, white)
+            text_rect = text_surface.get_rect(center=(self.resx // 2, self.resy// 4))
+
+# Hình ảnh
+            image_path = constants.IMAGE_TUTORIAL[i]  # Đường dẫn đến hình ảnh của bạn
+            image = pygame.image.load(image_path)
+            image_rect = image.get_rect(center=(self.resx // 2, self.resy // 2))
+            self.screen.blit(text_surface, text_rect)
+            self.screen.blit(image, image_rect)
+            
+            # continue_button_background = pygame.Rect(10, 10,100, 30)
+            # pygame.draw.rect(self.screen, BLACK, continue_button_background, border_radius=10)
+            # continue_button = pygame.Rect(top = 10, left = 10, width=100, height=30)
+            # pygame.draw.rect(self.screen, white, continue_button, 2, 10)
+            pygame.display.flip()
+
     def run(self):
         # Initialize the game (pygame, fonts)
         pygame.init()
@@ -409,7 +440,7 @@ class ScreenManager:
         text_rect = text_obj.get_rect()
         text_rect.center = (x, y)
         self.screen.blit(text_obj, text_rect)
-
+    
     def draw_menu(self):
         WHITE = (255, 255, 255)
         BLACK = (0, 0, 0)
@@ -424,9 +455,9 @@ class ScreenManager:
             
             self.screen.blit(background_image, (0, 0))
         
-            self.screen.blit(menu_image, (self.screen_width // 7, 10))
+            self.screen.blit(menu_image, (self.screen_width // 7, self.screen_height// 15))
             # Vẽ các lựa chọn
-            play_button = pygame.Rect(self.screen_width // 2 - 100, 200, 200, 50)
+            play_button = pygame.Rect(self.screen_width // 3, self.screen_height// 5, 200, 50)
             
             pygame.draw.rect(self.screen, WHITE, play_button, border_radius=10)
             self.draw_text('Play', font, BLACK, self.screen_width // 2, 225)
@@ -485,8 +516,7 @@ class ScreenManager:
                             
                         elif instructions_button.collidepoint(mouse_pos):
                             # Thực hiện hành động khi nhấp vào nút "Hướng dẫn"
-                            print("Hiển thị hướng dẫn!")
-                            
+                            Tetris(self.x, self.y).run_tutorial()
                         elif quit_button.collidepoint(mouse_pos):
                             # Thực hiện hành động khi nhấp vào nút "Thoát"
                             sys.exit()

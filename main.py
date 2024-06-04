@@ -3,4 +3,4 @@ import tetris
 
 
 if __name__ == '__main__':
-   tetris.Run(16, 30)
+   tetris.Run(24, 45)

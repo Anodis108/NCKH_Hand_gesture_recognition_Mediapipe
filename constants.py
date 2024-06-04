@@ -50,6 +50,19 @@ BLACK    = (0,0,0)
 # Timing constraints
 # Time for the generation of TIME_MOVE_EVENT (ms)
 MOVE_TICK          = 1000
+IMAGE_TUTORIAL = [".\\items\\Hand Stock\\hi.png", ".\\items\\Hand Stock\\like.png", 
+                  ".\\items\\Hand Stock\\nam_dam.png", ".\\items\\Hand Stock\\ngon_tro.png", 
+                  ".\\items\\Hand Stock\\ok.png", ".\\items\\Hand Stock\\sung_trau.png"]
+TEXT_TUTORIAL = ['''Hãy ádhsdfhdfasfh
+                 dsfhasdpufhfuafdpahfap
+                 usdfhpidasfhpasdf''',
+                 '''Hãy ádhsdfhdfasfha
+                 dsfhasdpufhfuafdpahf
+                 apusdfhpidasfhpasdf''',
+                 "Hãy ádhsdfhdfasfhadsfhasdpufhfuafdpahfapusdfhpidasfhpasdf",
+                 "Hãy ádhsdfhdfasfhadsfhasdpufhfuafdpahfapusdfhpidasfhpasdf",
+                 "Hãy ádhsdfhdfasfhadsfhasdpufhfuafdpahfapusdfhpidasfhpasdf",
+                 "Hãy ádhsdfhdfasfhadsfhasdpufhfuafdpahfapusdfhpidasfhpasdf"]
 # Allocated number for the move dowon event
 TIMER_MOVE_EVENT   = USEREVENT+1
 # Speed up ratio of the game (integer values)
