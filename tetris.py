@@ -414,9 +414,7 @@ class ScreenManager:
         WHITE = (255, 255, 255)
         BLACK = (0, 0, 0)
         font = pygame.font.Font(None, 36)
-        background_image = pygame.image.load(".\\items\\background_menu.png")
-
-
+        background_image = pygame.image.load(r".\items\Tetris Wallpaper.jpg")
         background_image = pygame.transform.scale(background_image, (self.screen_width, self.screen_height))
         menu_image = pygame.image.load(".\\items\\start_game.png")
         menu_image = pygame.transform.scale(menu_image, (230, 230))
@@ -504,6 +502,5 @@ class ScreenManager:
 def Run(x, y):
 
     ScreenManager.Run_game(x, y)
-
-
+Run(16, 30)
 #Special add to try pull requests
