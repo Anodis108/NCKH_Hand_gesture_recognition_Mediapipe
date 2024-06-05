@@ -36,7 +36,7 @@ def solve(args):
     mp_hands = mp.solutions.hands # tạo 1 đối tượng hand với 2 thuộc tính Hand và Handlandmark
     hands = mp_hands.Hands(
         static_image_mode=use_static_image_mode, # False là chạy webcam
-        max_num_hands=2,
+        max_num_hands=1,
         min_detection_confidence=min_detection_confidence,
         min_tracking_confidence=min_tracking_confidence,
     )
@@ -150,6 +150,7 @@ def solve(args):
                 global gesture, con_tro
                 gesture = keypoint_classifier_labels[hand_sign_id]
                 con_tro = tuple(landmark_list[8])
+                print(gesture, con_tro)
                 
         else:
             point_history.append([0, 0])

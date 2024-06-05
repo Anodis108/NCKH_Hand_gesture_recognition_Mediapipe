@@ -172,7 +172,9 @@ class Tetris(object):
                     if ev.type == pygame.QUIT or (ev.type == pygame.KEYDOWN and ev.unicode == 'q'):
                         self.draw_pause_menu("Tutorial pause", constants.CYAN)
                     if ev.type == pygame.KEYDOWN:
-                        if ev.key == constants.O_TUTORIAL[i]:
+                        
+                        gesture = main_app.gesture
+                        if gesture == constants.O_TUTORIAL[i]:
                             if (i == 3):
                                 self.active_block.rotate()
                                 ok = 1
