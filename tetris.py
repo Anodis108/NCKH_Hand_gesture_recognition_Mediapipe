@@ -124,7 +124,7 @@ class Tetris(object):
                 if ev.key == pygame.K_SPACE:
                     self.active_block.rotate()
                 if ev.key == pygame.K_p:
-                    self.draw_pause_menu("Game pause")
+                    self.draw_pause_menu("Game pause", self.active_block.color)
     
             # Detect if the movement event was fired by the timer.
             if ev.type == constants.TIMER_MOVE_EVENT:
@@ -144,31 +144,26 @@ class Tetris(object):
         self.myfont = pygame.font.SysFont(pygame.font.get_default_font(),constants.FONT_SIZE)
         self.screen = pygame.display.set_mode((self.resx,self.resy))
         pygame.display.set_caption("Tetris")    
-        self.print_status_line()
+  
         i = 0
         while i < 6:
             white = (255, 255, 255)
             BLACK = (0, 0, 0)
 
-            # Font chữ
-            font = pygame.font.Font(None, 36)
-            text = constants.TEXT_TUTORIAL[i]
-            text_surface = font.render(text, True, white)
-            text_rect = text_surface.get_rect(center=(self.resx // 2, self.resy// 4))
-
 # Hình ảnh
             image_path = constants.IMAGE_TUTORIAL[i]  # Đường dẫn đến hình ảnh của bạn
-            image = pygame.image.load(image_path)
-            image_rect = image.get_rect(center=(self.resx // 2, self.resy // 2))
-            self.screen.blit(text_surface, text_rect)
-            self.screen.blit(image, image_rect)
+            image_load = pygame.image.load(image_path)
+            image_scale = pygame.transform.scale(image_load , (250, 80))
+            self.screen.blit(image_scale, (45, 30))
             
+            self.draw_pause_menu("Next step", constants.GREEN)
             # continue_button_background = pygame.Rect(10, 10,100, 30)
             # pygame.draw.rect(self.screen, BLACK, continue_button_background, border_radius=10)
             # continue_button = pygame.Rect(top = 10, left = 10, width=100, height=30)
             # pygame.draw.rect(self.screen, white, continue_button, 2, 10)
-            pygame.display.flip()
-
+            pygame.display.update()
+            i += 1
+        ScreenManager.Run_game(16, 30)
     def run(self):
         # Initialize the game (pygame, fonts)
         pygame.init()
@@ -349,7 +344,7 @@ class Tetris(object):
         # Update the score         
         self.print_status_line()
 
-    def get_block(self):
+    def get_block(self, start_x, start_y):
         """
         Generate new block into the game if is required.
         """
@@ -357,10 +352,19 @@ class Tetris(object):
             # Get the block and add it into the block list(static for now)
             tmp = random.randint(0,len(self.block_data)-1)
             data = self.block_data[tmp]
-            self.active_block = block.Block(data[0],self.start_x,self.start_y,self.screen,data[1],data[2])
+            self.active_block = block.Block(data[0],start_x,start_y,self.screen,data[1],data[2])
             self.blk_list.append(self.active_block)
             self.new_block = False
-
+    def get_block_new(self, start_x, start_y):
+        """
+        Generate new block into the game if is required.
+        """
+        
+            # Get the block and add it into the block list(static for now)
+        tmp = random.randint(0,len(self.block_data)-1)
+        data = self.block_data[tmp]
+        self.active_block = block.Block(data[0],start_x,start_y,self.screen,data[1],data[2])
+        self.blk_list.append(self.active_block)
     def draw_game(self):
         """
         Draw the game screen.
@@ -378,16 +382,17 @@ class Tetris(object):
         rect_surf = pygame.Surface(rect.size, pygame.SRCALPHA)
         pygame.draw.rect(rect_surf, color, rect_surf.get_rect(), border_radius=corner_radius)
         surface.blit(rect_surf, rect.topleft)
-    def draw_pause_menu(self, text):
+    def draw_pause_menu(self, text, color):
         WHITE = (255, 255, 255)
         BLACK = (0, 0, 0)
+
         font = pygame.font.Font(None, 36)
 
         while True:
            
 
             # Vẽ thanh pause
-            pause_color = self.active_block.color
+            pause_color = color
             
             # Tạo đối tượng Rect với bo tròn góc
             pause_rect = pygame.Rect(self.resx // 8, self.resy // 3, self.resx * 6 // 8, self.resy // 9)
@@ -455,9 +460,9 @@ class ScreenManager:
             
             self.screen.blit(background_image, (0, 0))
         
-            self.screen.blit(menu_image, (self.screen_width // 7, self.screen_height// 15))
+            self.screen.blit(menu_image, (self.screen_width // 7, 10))
             # Vẽ các lựa chọn
-            play_button = pygame.Rect(self.screen_width // 3, self.screen_height// 5, 200, 50)
+            play_button = pygame.Rect(self.screen_width // 2 - 100, 200, 200, 50)
             
             pygame.draw.rect(self.screen, WHITE, play_button, border_radius=10)
             self.draw_text('Play', font, BLACK, self.screen_width // 2, 225)
