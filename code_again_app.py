@@ -26,7 +26,7 @@ from model import KeyPointClassifier
 from model import PointHistoryClassifier
 
 gesture = None
-
+con_tro = None
 
 def get_args():
     parser = argparse.ArgumentParser()
@@ -182,8 +182,9 @@ def main():
                     keypoint_classifier_labels[hand_sign_id], # dự đoán cử chỉ tay theo dự đoán
                     point_history_classifier_labels[most_common_fg_id[0][0]] # labels cử chỉ tay most theo lịch sử
                 )
-                global gesture
+                global gesture, con_tro
                 gesture = keypoint_classifier_labels[hand_sign_id]
+                con_tro = tuple(landmark_list[8])
         else:
             point_history.append([0, 0])
             
@@ -375,7 +376,7 @@ def draw_bounding_rect(use_brect, image, brect):
  
 def draw_landmarks(image, landmark_point):
     if len(landmark_point) > 0: # vẽ đốt các ngón
-        # Thumb : vẽ đót ngón cái
+        # # Thumb : vẽ đót ngón cái
         cv.line(image, tuple(landmark_point[2]), tuple(landmark_point[3]),
                 (0, 0, 0), 6) # vẽ màu đen
         cv.line(image, tuple(landmark_point[2]), tuple(landmark_point[3]),
@@ -935,6 +936,6 @@ if __name__ == '__main__':
     # test()
     p1 = threading.Thread(target=main, args=()) # thêm dấu (,) ở đuôi args vì nó yêu cầu đuôi là một iterable
     p1.start()
-    p2 = threading.Thread(target=Tetris(16, 30).run, args=())
-    p2.start()
+    # p2 = threading.Thread(target=Tetris(16, 30).run, args=())
+    # p2.start()
 

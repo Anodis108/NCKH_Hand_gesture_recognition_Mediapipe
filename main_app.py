@@ -13,6 +13,7 @@ from model import PointHistoryClassifier
 from solve import *
 
 gesture = None
+con_tro = None
 
 def solve(args):
     # Argument parsing
@@ -146,8 +147,10 @@ def solve(args):
                     keypoint_classifier_labels[hand_sign_id], # dự đoán cử chỉ tay theo dự đoán
                     point_history_classifier_labels[most_common_fg_id[0][0]] # labels cử chỉ tay most theo lịch sử
                 )
-                global gesture
+                global gesture, con_tro
                 gesture = keypoint_classifier_labels[hand_sign_id]
+                con_tro = tuple(landmark_list[8])
+                
         else:
             point_history.append([0, 0])
             

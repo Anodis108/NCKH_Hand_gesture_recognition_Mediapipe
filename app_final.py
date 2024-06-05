@@ -5,6 +5,7 @@ import threading
 import main_app 
 from tetris import Tetris
 
+
 def get_args():
     parser = argparse.ArgumentParser()
 
