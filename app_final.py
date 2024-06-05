@@ -35,4 +35,3 @@ if __name__ == '__main__':
     p2 = threading.Thread(target=tetris.Run, args=(16, 30))
     p2.start()
         
-    

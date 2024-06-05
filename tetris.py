@@ -28,6 +28,8 @@ import block
 import constants
 
 import main_app 
+a, b = 'a', 'a'
+
 class Tetris(object):
     """
     The class with implementation of tetris game logic.
@@ -102,9 +104,10 @@ class Tetris(object):
         Get the event from the event queue and run the appropriate 
         action.
         """
-
+        global a, b
         # Take the event from the event queue.
         for ev in pygame.event.get():
+            
             # Check if the close button was fired.
             con_tro = list(main_app.con_tro)
             x, y = con_tro[0], con_tro[1]
@@ -113,7 +116,13 @@ class Tetris(object):
             # Detect the key evevents for game control.
             gesture = main_app.gesture
             # print(gesture, 2)
-            if gesture is not None:
+            a = gesture
+            print(a, b)
+            # if (gesture is not None) and (a != b):
+            if (gesture is not None):
+                b = a
+                pygame.time.delay(200)
+                
                 if gesture == 'Down':
                     self.active_block.move(0,constants.BHEIGHT)
                 if gesture == 'Left':
@@ -124,7 +133,10 @@ class Tetris(object):
                     self.active_block.rotate()
                 if gesture == 'Nothing':
                     self.draw_pause_menu("Game pause", self.active_block.color)
-    
+                if gesture == 'Click':
+                    pass
+                
+            
             # Detect if the movement event was fired by the timer.
             if ev.type == constants.TIMER_MOVE_EVENT:
                 self.active_block.move(0,constants.BHEIGHT)
@@ -149,7 +161,9 @@ class Tetris(object):
         else:
             self.draw_pause_menu("Next step", constants.CYAN)
         pygame.display.flip()
+        
     def run_tutorial(self):
+        
         pygame.init()
         pygame.font.init()
         self.myfont = pygame.font.SysFont(pygame.font.get_default_font(),constants.FONT_SIZE)
@@ -201,6 +215,7 @@ class Tetris(object):
             i += 1
         ScreenManager.Run_game(16, 30)
     def run(self):
+        
         # Initialize the game (pygame, fonts)
         pygame.init()
         pygame.font.init()

@@ -148,12 +148,19 @@ def solve(args):
                     point_history_classifier_labels[most_common_fg_id[0][0]] # labels cử chỉ tay most theo lịch sử
                 )
                 global gesture, con_tro
-                gesture = keypoint_classifier_labels[hand_sign_id]
-                con_tro = tuple(landmark_list[8])
+                c = keypoint_classifier_labels[hand_sign_id]
+                if c is None:
+                    gesture = None
+                elif c != gesture:
+                    gesture = keypoint_classifier_labels[hand_sign_id]
                 print(gesture, con_tro)
+                    
+                con_tro = tuple(landmark_list[8])
+                
                 
         else:
             point_history.append([0, 0])
+            gesture = None
             
         debug_image = draw_point_history(debug_image, point_history) # Dựa trên lịch sử, nếu là con trỏ thì vẽ hình tròn đầu ngón tay  
         debug_image = draw_info(debug_image, fps, mode, number) # vẽ khu vực FPS
