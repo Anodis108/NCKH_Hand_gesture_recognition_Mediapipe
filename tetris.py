@@ -138,6 +138,18 @@ class Tetris(object):
         speed = math.floor(constants.MOVE_TICK / self.speed)
         speed = max(1,speed)
         pygame.time.set_timer(constants.TIMER_MOVE_EVENT,speed)
+    
+    def draw_tutorial(self, i):
+        self.screen.fill((0, 0, 0))
+        image_path = constants.IMAGE_TUTORIAL[i]  # Đường dẫn đến hình ảnh của bạn
+        image_load = pygame.image.load(image_path)
+        image_scale = pygame.transform.scale(image_load , (250, 80))
+        self.screen.blit(image_scale, (45, 30))
+        if self.active_block != None:
+            self.active_block.draw()
+        else:
+            self.draw_pause_menu("Next step", constants.CYAN)
+        pygame.display.flip()
     def run_tutorial(self):
         pygame.init()
         pygame.font.init()
@@ -146,22 +158,45 @@ class Tetris(object):
         pygame.display.set_caption("Tetris")    
   
         i = 0
-        while i < 6:
+        while i < 4:
             white = (255, 255, 255)
             BLACK = (0, 0, 0)
 
 # Hình ảnh
-            image_path = constants.IMAGE_TUTORIAL[i]  # Đường dẫn đến hình ảnh của bạn
-            image_load = pygame.image.load(image_path)
-            image_scale = pygame.transform.scale(image_load , (250, 80))
-            self.screen.blit(image_scale, (45, 30))
+
+            self.get_block_new(150, 250)
             
-            self.draw_pause_menu("Next step", constants.GREEN)
+            self.draw_tutorial(i)
+            while True:
+                ok = 0
+                for ev in pygame.event.get():
+                    if ev.type == pygame.QUIT or (ev.type == pygame.KEYDOWN and ev.unicode == 'q'):
+                        self.draw_pause_menu("Tutorial pause", constants.CYAN)
+                    if ev.type == pygame.KEYDOWN:
+                        if ev.key == constants.O_TUTORIAL[i]:
+                            if (i == 3):
+                                self.active_block.rotate()
+                                ok = 1
+                                
+                                self.draw_tutorial(i)
+                                pygame.time.delay(2000)
+                                break
+                            else:
+                                self.active_block.move(constants.MOVE_TUTORIAL[i][0], constants.MOVE_TUTORIAL[i][1])
+                                ok = 1
+                                self.draw_tutorial(i)
+                                
+                                pygame.time.delay(2000)
+                                break
+                if ok:
+                    break       
+            self.active_block = None
+            self.draw_tutorial(i)
             # continue_button_background = pygame.Rect(10, 10,100, 30)
             # pygame.draw.rect(self.screen, BLACK, continue_button_background, border_radius=10)
             # continue_button = pygame.Rect(top = 10, left = 10, width=100, height=30)
             # pygame.draw.rect(self.screen, white, continue_button, 2, 10)
-            pygame.display.update()
+
             i += 1
         ScreenManager.Run_game(16, 30)
     def run(self):
@@ -344,7 +379,7 @@ class Tetris(object):
         # Update the score         
         self.print_status_line()
 
-    def get_block(self, start_x, start_y):
+    def get_block(self):
         """
         Generate new block into the game if is required.
         """
@@ -352,7 +387,7 @@ class Tetris(object):
             # Get the block and add it into the block list(static for now)
             tmp = random.randint(0,len(self.block_data)-1)
             data = self.block_data[tmp]
-            self.active_block = block.Block(data[0],start_x,start_y,self.screen,data[1],data[2])
+            self.active_block = block.Block(data[0],self.start_x,self.start_y,self.screen,data[1],data[2])
             self.blk_list.append(self.active_block)
             self.new_block = False
     def get_block_new(self, start_x, start_y):
@@ -363,14 +398,16 @@ class Tetris(object):
             # Get the block and add it into the block list(static for now)
         tmp = random.randint(0,len(self.block_data)-1)
         data = self.block_data[tmp]
+
         self.active_block = block.Block(data[0],start_x,start_y,self.screen,data[1],data[2])
-        self.blk_list.append(self.active_block)
+
     def draw_game(self):
         """
         Draw the game screen.
         """
         # Clean the screen, draw the board and draw
         # all tetris blocks
+        
         self.screen.fill(constants.BLACK)
         self.draw_board()
         for blk in self.blk_list:
@@ -514,8 +551,7 @@ class ScreenManager:
                         if play_button.collidepoint(mouse_pos):
                             # Thực hiện hành động khi nhấp vào nút "Chơi"
                             # Đây là nơi bạn gọi hàm để chuyển sang màn hình chơi game
-                            pygame.draw.rect(self.screen, BLACK, play_button, border_radius=10)
-                            self.draw_text('Play', font, WHITE, self.screen_width // 2, 225)
+                            
                             Tetris(self.x, self.y).run()
 
                             

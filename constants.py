@@ -17,7 +17,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
+import pygame
 from pygame.locals import *
 
 # Configuration of building shape block
@@ -54,7 +54,8 @@ IMAGE_TUTORIAL = [".\\items\\Hand Stock\\down_move.png", ".\\items\\Hand Stock\\
                   ".\\items\\Hand Stock\\right_move.png",
                   ".\\items\\Hand Stock\\rotate_move.png", ".\\items\\Hand Stock\\mouse_move.png", ".\\items\\Hand Stock\\click.png"]
 
-
+O_TUTORIAL = [pygame.K_s, pygame.K_a, pygame.K_d, pygame.K_SPACE ]
+MOVE_TUTORIAL = [(0, BHEIGHT), (-BWIDTH,0), (BWIDTH,0)]
 # Allocated number for the move dowon event
 TIMER_MOVE_EVENT   = USEREVENT+1
 # Speed up ratio of the game (integer values)
