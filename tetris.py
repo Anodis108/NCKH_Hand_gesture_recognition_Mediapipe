@@ -307,6 +307,12 @@ class Tetris(object):
         # Border logic, check if we colide with down border or any
         # other border. This check also includes the detection with other tetris blocks. 
         down_board  = self.active_block.check_collision([self.board_down])
+        if down_board:
+            self.active_block.restore()
+            self.active_block.backup()
+            self.active_block.move(0,constants.BHEIGHT)
+        down_board  = self.active_block.check_collision([self.board_down])
+            
         any_border  = self.active_block.check_collision([self.board_left,self.board_up,self.board_right])
         block_any   = self.block_colides()
         # Restore the configuration if any collision was detected

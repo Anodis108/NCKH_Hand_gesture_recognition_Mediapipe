@@ -151,6 +151,8 @@ class Block(object):
             # All rotation calculates are done in the original coordinates.
             origX = (bl.x - self.x)/constants.BWIDTH
             origY = (bl.y - self.y)/constants.BHEIGHT
+            
+           
             rx,ry = self.get_rotated(origX,origY)
             newX = rx*constants.BWIDTH  + self.x + self.diffx
             newY = ry*constants.BHEIGHT + self.y + self.diffy
@@ -164,6 +166,7 @@ class Block(object):
         self.y += self.diffy
         self.diffx = 0
         self.diffy = 0
+        
         self.diff_rotation = 0
 
     def backup(self):
