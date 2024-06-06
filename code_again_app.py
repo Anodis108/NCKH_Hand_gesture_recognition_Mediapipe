@@ -5,7 +5,7 @@
 #  |          2) a "multi_hand_world_landmarks" field that contains the hand landmarks
 #  |             on each detected hand in real-world 3D coordinates that are in meters
 #  |             with the origin at the hand's approximate geometric center.
-#  |          3) a "multi_handedness" field that contains the handedness (left v.s.
+#  |          3) a "multi_handedness" field that contains the + (left v.s.
 #  |             right hand) of the detected hand
 
 import threading # chạy đa luồng

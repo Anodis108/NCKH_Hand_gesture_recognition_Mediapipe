@@ -117,7 +117,7 @@ class Tetris(object):
             gesture = main_app.gesture
             # print(gesture, 2)
             a = gesture
-            print(a, b)
+            # print(a, b)
             # if (gesture is not None) and (a != b):
             if (gesture is not None):
                 b = a
@@ -183,26 +183,25 @@ class Tetris(object):
             while True:
                 ok = 0
                 for ev in pygame.event.get():
+                    
                     if ev.type == pygame.QUIT or (ev.type == pygame.KEYDOWN and ev.unicode == 'q'):
                         self.draw_pause_menu("Tutorial pause", constants.CYAN)
-                    if ev.type == pygame.KEYDOWN:
-                        
-                        gesture = main_app.gesture
-                        if gesture == constants.O_TUTORIAL[i]:
-                            if (i == 3):
-                                self.active_block.rotate()
-                                ok = 1
-                                
-                                self.draw_tutorial(i)
-                                pygame.time.delay(2000)
-                                break
-                            else:
-                                self.active_block.move(constants.MOVE_TUTORIAL[i][0], constants.MOVE_TUTORIAL[i][1])
-                                ok = 1
-                                self.draw_tutorial(i)
-                                
-                                pygame.time.delay(2000)
-                                break
+                                            
+                    gesture = main_app.gesture
+                    if gesture == constants.O_TUTORIAL[i]:
+                        if (i == 3):
+                            self.active_block.rotate()
+                            ok = 1
+                            
+                            self.draw_tutorial(i)
+                            pygame.time.delay(2000)
+                            break
+                        else:
+                            self.active_block.move(constants.MOVE_TUTORIAL[i][0], constants.MOVE_TUTORIAL[i][1])
+                            ok = 1
+                            self.draw_tutorial(i)
+                            pygame.time.delay(2000)
+                            break
                 if ok:
                     break       
             self.active_block = None

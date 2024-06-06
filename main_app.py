@@ -153,7 +153,7 @@ def solve(args):
                     gesture = None
                 elif c != gesture:
                     gesture = keypoint_classifier_labels[hand_sign_id]
-                print(gesture, con_tro)
+                # print(gesture, con_tro)
                     
                 con_tro = tuple(landmark_list[8])
                 
